@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>剪刀石头布游戏</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        text-align: center;
+      }
+      h1 {
+        color: #333;
+        margin-top: 50px;
+      }
+      #game {
+        display: flex;
+        justify-content: center;
+        /* vertical-align: middle; */
+        align-items: center;
+        margin-top: 50px;
+      }
+      #game-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #game img {
+        width: 100px;
+        height: 100px;
+        margin: 0 10px;
+        cursor: pointer;
+      }
+      #game img:hover {
+        opacity: 0.7;
+      }
+      #result {
+        font-size: 24px;
+        margin-top: 50px;
+      }
+      #choices {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 50px;
+      }
+      #choices img {
+        width: 100px;
+        height: 100px;
+        margin: 0 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>剪刀石头布游戏</h1>
+    <div id="game">
+      <h2>请出拳</h2>
+      <div id="game-img">
+        <img src="paper.png" onclick="play('paper')">
+        <img src="scissors.png" onclick="play('scissors')">
+        <img src="rock.png" onclick="play('rock')">
+      </div>
+    </div>
+    <div id="result"></div>
+    <div id="choices"></div>
+    <script>
+      function play(userChoice) {
+        var choices = ["rock", "paper", "scissors"];
+        var computerChoice = choices[Math.floor(Math.random() * 3)];
+        var result;
+        if (userChoice === computerChoice) {
+          result = "<h2>平局</h2>";
+        } else if (userChoice === "rock" && computerChoice === "scissors" || 
+          userChoice === "paper" && computerChoice === "rock" || 
+          userChoice === "scissors" && computerChoice === "paper") {
+          result = '<h2 style="color:green;"> 你赢了！</h2>';
+        } else {
+          result = '<h2 style="color: red">你输了。</h2>';
+        }
+        document.getElementById("result").innerHTML = result;
+        document.getElementById("choices").innerHTML = `
+          <div>
+            <span>你出拳：</span>
+            <img src="${userChoice}.png">
+          </div>
+          <div style="margin-left: 100px">
+            <span>电脑出拳：</span>
+            <img src="${computerChoice}.png">
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>
