@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>文件上传示例</title>
+</head>
+<body>
+  <h1>文件上传示例</h1>
+  <form id="upload-form">
+    <input type="file" id="file-input">
+    <button type="submit">上传</button>
+  </form>
+  <div id="progress"></div>
+  <div id="remaining-time"></div>
+  <script>
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('file-input');
+    const progress = document.getElementById('progress');
+    const remainingTime = document.getElementById('remaining-time');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const file = fileInput.files[0];
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload');
+      xhr.setRequestHeader('x-file-name', file.name);
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percent = (event.loaded / event.total) * 100;
+          progress.innerHTML = `上传进度：${percent.toFixed(2)}%`;
+          const remainingBytes = event.total - event.loaded;
+          const bytesPerSecond = event.loaded / (event.timeStamp / 1000);
+          const remainingTimeSeconds = remainingBytes / bytesPerSecond;
+          const remainingTimeFormatted = formatTime(remainingTimeSeconds);
+          remainingTime.innerHTML = `剩余时间：${remainingTimeFormatted}`;
+        }
+      });
+      xhr.send(file);
+    });
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = Math.floor(seconds % 60);
+      return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+  </script>
+</body>
+</html>
